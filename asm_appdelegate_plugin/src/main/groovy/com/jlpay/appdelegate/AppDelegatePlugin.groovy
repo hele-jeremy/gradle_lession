@@ -2,9 +2,9 @@ package com.jlpay.appdelegate
 
 import com.android.build.gradle.AppExtension
 import org.gradle.api.Plugin
-import org.gradle.api.Project;
+import org.gradle.api.Project
 
-class AppDelegatePlugin implements Plugin<Project> {
+public class AppDelegatePlugin implements Plugin<Project> {
 
 
     @Override

@@ -7,20 +7,24 @@ dependencies {
     implementation gradleApi()
     implementation localGroovy()
 
-    implementation "com.android.tools.build:gradle:3.6.1"
+//    implementation "com.android.tools.build:gradle:3.6.1"
+    implementation "com.android.tools.build:gradle:4.1.3"
 
     implementation "org.ow2.asm:asm:7.1"
     implementation "org.ow2.asm:asm-commons:7.1"
 }
 
-group = "com.jlpay.appdelegate"
-version = "1.0.0"
+def group="jlpay.appdelegate.plugin"
+def version="2.0.0"
 
 
 uploadArchives {
     repositories {
+
         mavenDeployer {
-            pom.artifactId = 'apd'
+            pom.groupId = group
+            pom.version = version
+            pom.artifactId = 'app-delegate'
 //            本地maven配置
             repository(url: uri("../asm_appdelegate_repo"))
         }

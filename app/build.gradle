@@ -1,21 +1,26 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'jeremy.asm.lifecycle'
 //apply plugin: 'jlpay.asm.appdelegate'
-apply plugin: 'apd'
+//apply plugin: 'jeremy.asm.lifecycle'
+
+apply plugin: 'app-delegate'
 
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+//        mavenLocal()
+//        jcenter()
         //自定义插件的本地maven地址
 //        maven {url "../asm_lifecycle_repo"}
-        maven {url "../asm_appdelegate_repo"}
+        maven {
+            url "../asm_appdelegate_repo"
+        }
     }
 
     dependencies {
 //        classpath "jeremy.lifecycle.plugin:asm_lifecycle_plugin:1.0.0"
-//        classpath "com.jlpay.appdelegate:asm_appdelegate_plugin:1.0.0"
-        classpath "com.jlpay.appdelegate:apd:1.0.0"
+//        classpath "jlpay.appdelegate.plugin:asm_appdelegate_plugin:2.0.0"
+        classpath "jlpay.appdelegate.plugin:app-delegate:2.0.0"
     }
 }
 

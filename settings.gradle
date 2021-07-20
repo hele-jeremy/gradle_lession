@@ -1,5 +1,5 @@
+rootProject.name = "gradle_lession"
 include ':asm_appdelegate_plugin'
-include ':applifecycle_delegate'
+//include ':applifecycle_delegate'
 include ':asm_lifecycle_plugin'
 include ':app'
-rootProject.name = "gradle_lession"

@@ -1,14 +1,14 @@
 package com.jlpay.appdelegate
 
 import com.android.build.api.transform.DirectoryInput
-import com.android.build.api.transform.QualifiedContent;
+import com.android.build.api.transform.QualifiedContent
 import com.android.build.api.transform.Transform
 import com.android.build.api.transform.TransformException
 import com.android.build.api.transform.TransformInput
 import com.android.build.api.transform.TransformInvocation
-import com.google.common.collect.Sets;
+import com.google.common.collect.Sets
 
-class AppDelegateTransform extends Transform {
+public class AppDelegateTransform extends Transform {
 
 
     /**
@@ -65,7 +65,7 @@ class AppDelegateTransform extends Transform {
         super.transform(transformInvocation)
 
         //拿到所有的class文件
-        Collection<TransformInput> transformInputs = transformInvocation.inputs
+        /*Collection<TransformInput> transformInputs = transformInvocation.inputs
         transformInputs.each { TransformInput transformInput ->
 
             transformInput.directoryInputs.each { DirectoryInput directoryInput ->
@@ -83,6 +83,10 @@ class AppDelegateTransform extends Transform {
                 }
 
             }
-        }
+        }*/
+
+
+
+
     }
 }
