@@ -1,28 +1,7 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'jlpay.asm.appdelegate'
+apply plugin: 'com.jlpay.appdelegate'
 //apply plugin: 'jeremy.asm.lifecycle'
 
-apply plugin: 'app-delegate'
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-//        mavenLocal()
-//        jcenter()
-        //自定义插件的本地maven地址
-//        maven {url "../asm_lifecycle_repo"}
-        maven {
-            url "../asm_appdelegate_repo"
-        }
-    }
-
-    dependencies {
-//        classpath "jeremy.lifecycle.plugin:asm_lifecycle_plugin:1.0.0"
-//        classpath "jlpay.appdelegate.plugin:asm_appdelegate_plugin:2.0.0"
-        classpath "jlpay.appdelegate.plugin:app-delegate:2.0.0"
-    }
-}
 
 android {
     compileSdkVersion 30
@@ -58,4 +37,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    implementation project(path: ':base')
+    implementation project(path: ':cart')
 }
