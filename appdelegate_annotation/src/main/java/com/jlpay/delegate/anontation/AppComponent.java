@@ -1,4 +1,5 @@
-package com.jeremy.appdelegate.anontation;
+package com.jlpay.delegate.anontation;
+
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +8,5 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS)
-public @interface ModuleComponent {
-    //组件初始化的优先级
-    int priority() default 100;
+public @interface AppComponent {
 }

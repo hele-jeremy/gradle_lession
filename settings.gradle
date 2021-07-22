@@ -1,3 +1,5 @@
+include ':appdelegate_apt'
+include ':appdelegate_annotation'
 rootProject.name = "gradle_lession"
 include ':base'
 include ':cart'

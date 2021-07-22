@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jlpay.appdelegate'
+//apply plugin: 'com.jlpay.appdelegate'
 //apply plugin: 'jeremy.asm.lifecycle'
 
 
@@ -27,6 +27,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -39,4 +44,9 @@ dependencies {
 
     implementation project(path: ':base')
     implementation project(path: ':cart')
+
+
+//    implementation project(path: ':applifecycle_delegate')
+//    implementation project(path: ':appdelegate_annotation')
+//    annotationProcessor project(':appdelegate_apt')
 }

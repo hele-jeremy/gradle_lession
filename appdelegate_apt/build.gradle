@@ -1,0 +1,18 @@
+apply plugin: 'java-library'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    implementation project(path: ':appdelegate_annotation')
+    //自动注册注解处理器
+//    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
+//    compileOnly 'com.google.auto.service:auto-service-annotations:1.0-rc7'
+    implementation 'com.google.auto.service:auto-service:1.0'
+
+    //生成辅助类
+    implementation 'com.squareup:javapoet:1.8.0'
+    //工具类
+    implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation 'org.apache.commons:commons-collections4:4.1'
+}

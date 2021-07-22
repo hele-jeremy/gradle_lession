@@ -1,14 +1,41 @@
 package com.jlpay.cart;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.res.Configuration;
 
-import com.jeremy.appdelegate.anontation.ModuleComponent;
+import com.jeremy.appdelegate.IAppLifecycleDelegate;
+import com.jlpay.delegate.anontation.ModuleComponent;
 
 @ModuleComponent(priority = 4)
-public class CartApplication extends Application {
+public class CartApplication implements IAppLifecycleDelegate {
+    @Override
+    public void attachBaseContext(Context base) {
+
+    }
 
     @Override
     public void onCreate() {
-        super.onCreate();
+
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+
+    }
+
+    @Override
+    public void onLowMemory() {
+
+    }
+
+    @Override
+    public void onTerminate() {
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
     }
 }
