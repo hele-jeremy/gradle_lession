@@ -1,11 +1,11 @@
-include ':appdelegate_apt'
-include ':appdelegate_annotation'
 rootProject.name = "gradle_lession"
+include ':app'
+include ':appdelegate_annotation'
 include ':base'
 include ':cart'
 include ':asm_delegate_plugin'
-include ':app'
 include ':applifecycle_delegate'
+include ':appdelegate_apt'
 
 
 
