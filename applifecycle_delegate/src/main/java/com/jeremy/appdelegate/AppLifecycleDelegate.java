@@ -1,4 +1,4 @@
-package com.jlpay.delegate.anontation;
+package com.jeremy.appdelegate;
 
 import android.app.Application;
 import android.content.Context;
