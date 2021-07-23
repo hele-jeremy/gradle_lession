@@ -1,6 +1,5 @@
 package com.jlpay.cart;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 

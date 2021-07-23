@@ -1,15 +1,9 @@
-package com.jeremy.gradle_lession;
+package com.jeremy.appdelegate;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 
-import com.jeremy.appdelegate.IAppLifecycleDelegate;
-import com.jlpay.delegate.anontation.ModuleComponent;
-
-
-@ModuleComponent(priority = 1)
-public class ModuleApplication implements IAppLifecycleDelegate {
+public class TestApp implements IAppLifecycleDelegate{
     @Override
     public void attachBaseContext(Context base) {
 

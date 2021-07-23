@@ -18,3 +18,6 @@ Module2Application中执行的是当前module2组件需要执行的一些初始�
 
 https://www.jianshu.com/p/65433846d38a
 而该方式则是通过一个委托代理接口来进行生命周期的分发
+
+
+apt processor 远程调试:https://blog.csdn.net/u012823070/article/details/89237170

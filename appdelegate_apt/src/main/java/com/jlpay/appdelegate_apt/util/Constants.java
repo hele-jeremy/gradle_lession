@@ -8,5 +8,9 @@ public final class Constants {
     public static final String KEY_COMPONENT_NAME = "DELEGATE_COMPONENT_NAME";
     //@ModuleComponent注解的全路径名称
     public static final String ANNOTATION_MODULECOMPONENT = "com.jlpay.delegate.anontation.ModuleComponent";
+    //IAppLifecycleDelegate接口的路径
+    public static final String IAPPLIFECYCLEDELEGATE ="com.jeremy.appdelegate.IAppLifecycleDelegate";
+    //DelegateMeta类的路径
+    public static final String DELEGATEMETA ="com.jeremy.appdelegate.DelegateMeta";
 
 }
