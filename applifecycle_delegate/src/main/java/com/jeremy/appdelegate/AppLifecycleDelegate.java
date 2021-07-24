@@ -3,12 +3,11 @@ package com.jeremy.appdelegate;
 import android.content.Context;
 import android.content.res.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeSet;
 
 public final class AppLifecycleDelegate {
 
-    private List<DelegateMeta> mAppDelegateMetas = new ArrayList<>();
+    private TreeSet<DelegateMeta> mAppDelegateMetas = new TreeSet<>();
 
     private AppLifecycleDelegate() {
         loadModuleComponentsInfo();
@@ -26,7 +25,7 @@ public final class AppLifecycleDelegate {
      * 字节码插桩将需要进行生命周期派发的类在该方法中添加到mApplications集合中
      */
     private void loadModuleComponentsInfo() {
-        mAppDelegateMetas.add(null);
+        new TestAppLifecycleDelegate().collect(mAppDelegateMetas);
     }
 
 

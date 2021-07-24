@@ -1,17 +1,17 @@
 package com.jlpay.appdelegate
 
-import com.android.build.api.transform.DirectoryInput
-import com.android.build.api.transform.JarInput
-import com.android.build.api.transform.QualifiedContent
-import com.android.build.api.transform.Transform
-import com.android.build.api.transform.TransformException
-import com.android.build.api.transform.TransformInput
-import com.android.build.api.transform.TransformInvocation
+import com.android.build.api.transform.*
+import com.android.utils.FileUtils
 import com.google.common.collect.Sets
+import com.jlpay.appdelegate.util.Logger
+import com.jlpay.appdelegate.util.RegisterCodeGenerator
+import com.jlpay.appdelegate.util.TransConstans
+import com.jlpay.appdelegate.util.TransformUtil
 import groovy.io.FileType
+import org.apache.commons.codec.digest.DigestUtils
 import org.gradle.api.Project
 
-public class AppDelegateTransform extends Transform {
+class AppDelegateTransform extends Transform {
 
     Project mProject
 
@@ -25,7 +25,7 @@ public class AppDelegateTransform extends Transform {
      */
     @Override
     String getName() {
-        return "AppDelegateTransform"
+        return TransConstans.TRANSFORM_NAME
     }
 
     /**
@@ -35,6 +35,7 @@ public class AppDelegateTransform extends Transform {
      */
     @Override
     Set<QualifiedContent.ContentType> getInputTypes() {
+//        return TransformManager.CONTENT_CLASS
         return Collections.singleton(QualifiedContent.DefaultContentType.CLASSES)
     }
 
@@ -44,6 +45,9 @@ public class AppDelegateTransform extends Transform {
      */
     @Override
     Set<? super QualifiedContent.Scope> getScopes() {
+        //检索整个工程
+//        return TransformManager.SCOPE_FULL_PROJECT
+
         return Sets.immutableEnumSet(
                 QualifiedContent.Scope.PROJECT,   //当前工程模块
                 QualifiedContent.Scope.SUB_PROJECTS, //其他模块
@@ -57,7 +61,7 @@ public class AppDelegateTransform extends Transform {
      */
     @Override
     boolean isIncremental() {
-        return true
+        return false
     }
 
 
@@ -72,49 +76,97 @@ public class AppDelegateTransform extends Transform {
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
 //        super.transform(transformInvocation)
 
-        //保存包含AppLifecycleDelegate类的jar包路径的数组
-        def AppLifecycleDelegateStus = []
-        //保存包含@AppComponent @ModuleComponent注解修饰的类的jar包路径
-        def specificAnnotatoinStubs = []
-
-        System.out.println("start*************************打印class名称*******************************************")
+        def appLifecycleDelegateList = []
+        Logger.i("start scacn appdegate info ------- ")
         //拿到所有的class文件
         Collection<TransformInput> transformInputs = transformInvocation.inputs
+        //转换后的输出
+        def outputProvider = transformInvocation.outputProvider
+//        if (outputProvider != null) {
+//            outputProvider.deleteAll()
+//        }
+
         transformInputs.each { TransformInput transformInput ->
+
+            //遍历所有的jar文件
+            transformInput.jarInputs.each { JarInput jarInput ->
+
+                if (jarInput.file.exists()) {
+                    def jarName = jarInput.name
+                    def jarAbsolutePath = jarInput.file.getAbsolutePath()
+                    Logger.i("find jar---: " + jarName)
+                    Logger.i("find jar---: " + jarAbsolutePath)
+                    //重命名jar名称
+                    def hexName = DigestUtils.md5Hex(jarAbsolutePath)
+                    if (jarName.endsWith(".jar")) {
+                        jarName = jarName.substring(0, jarName.length() - 4)
+                    }
+
+                    def jarFile = jarInput.file
+                    //获取输出重命名后的jar包的路径
+                    File destFile = outputProvider.getContentLocation(jarName + "_" + hexName, jarInput.contentTypes, jarInput.scopes, Format.JAR)
+
+                    //过滤我们需要的指定的类
+                    if (TransformUtil.shouldProcessPreDexJar(jarAbsolutePath)) {
+                        List<String> classNameList = TransformUtil.scanJar(jarFile, destFile)
+                        if (classNameList != null) {
+                            appLifecycleDelegateList.addAll(classNameList)
+                        }
+                    }
+
+                    Logger.i("jar appLifecycleDelegateList : " + appLifecycleDelegateList)
+                    //拷贝输出
+                    FileUtils.copyFile(jarFile, destFile)
+
+                }
+            }
 
             //遍历所有的class文件夹
             transformInput.directoryInputs.each { DirectoryInput directoryInput ->
                 File dir = directoryInput.file
 
                 if (dir) {
-                    3
                     dir.traverse(type: FileType.FILES, nameFilter: ~/.*\.class/) { File file ->
-                        System.out.println("find class---: " + file.name)
-                        System.out.println("find class---: " + file.path)
+                        Logger.i("find class---: " + file.name)
+                        Logger.i("find class---: " + file.path)
 
                     }
                 } else {
-                    System.out.println("find class---**: " + dir.name)
-                    System.out.println("find class---**: " + dir.path)
+                    Logger.i("find class---**: " + dir.name)
+                    Logger.i("find class---**: " + dir.path)
                 }
 
+                if (directoryInput.file.isDirectory()) {
+                    directoryInput.file.eachFileRecurse { File file ->
+                        if (TransformUtil.isTargetClass(file)) {
+                            appLifecycleDelegateList.add(file.name)
+                        }
+                    }
+                }
 
+                Logger.i("directory appLifecycleDelegateList : " + appLifecycleDelegateList)
 
-            }
-
-
-            //遍历所有的jar文件
-            transformInput.jarInputs.each { JarInput jarInput ->
-                if(!jarInput.file.exists()){return }
-
-                System.out.println("find jar---: " + jarInput.name)
-                System.out.println("find jar---: " + jarInput.file.getAbsolutePath())
+                def dest = outputProvider.getContentLocation(directoryInput.name, directoryInput.contentTypes, directoryInput.scopes, Format.DIRECTORY)
+                FileUtils.copyDirectory(directoryInput.file, dest)
             }
 
 
         }
 
-        System.out.println("end*************************打印class名称*******************************************")
+        Logger.i("total appLifecycleDelegateList : " + appLifecycleDelegateList)
+
+        if (TransformUtil.INSERT_BYTE_CODE_CLASS_FILE) {
+            TransformUtil.TRANSFORM_CLASS_NAME_LIST.each { String className ->
+                Logger.i("each className : " + className)
+
+                RegisterCodeGenerator.insertInitCode(appLifecycleDelegateList)
+
+
+            }
+        }
+
+
+        Logger.i("end scacn appdegate info ------- ")
 
 
     }
