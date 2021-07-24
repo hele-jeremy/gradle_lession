@@ -1,22 +1,18 @@
 package com.jeremy.appdelegate;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.res.Configuration;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppLifecycleDelegate {
+public final class AppLifecycleDelegate {
 
-    private List<Application> mApplications = new ArrayList<Application>();
+    private List<DelegateMeta> mAppDelegateMetas = new ArrayList<>();
 
     private AppLifecycleDelegate() {
+        loadModuleComponentsInfo();
     }
-
 
     private static final class SingletonHolder {
         private static final AppLifecycleDelegate INSTANCE = new AppLifecycleDelegate();
@@ -26,9 +22,13 @@ public class AppLifecycleDelegate {
         return SingletonHolder.INSTANCE;
     }
 
-    public List<Application> getApplications() {
-        return mApplications;
+    /**
+     * 字节码插桩将需要进行生命周期派发的类在该方法中添加到mApplications集合中
+     */
+    private void loadModuleComponentsInfo() {
+        mAppDelegateMetas.add(null);
     }
+
 
     /**
      * 通过反射调用attachBaseContext方法
@@ -36,8 +36,8 @@ public class AppLifecycleDelegate {
      * @param base
      */
     public void attachBaseContext(Context base) {
-        for (Application app : mApplications) {
-            try {
+        for (DelegateMeta meta : mAppDelegateMetas) {
+            /*try {
                 Class<ContextWrapper> contextWrapper = ContextWrapper.class;
                 Method attachBaseContextMethod = contextWrapper.getDeclaredMethod("attachBaseContext", Context.class);
                 attachBaseContextMethod.setAccessible(true);
@@ -48,42 +48,45 @@ public class AppLifecycleDelegate {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
-            }
+            }*/
+
+
+            meta.getAppDelegate().attachBaseContext(base);
         }
     }
 
 
     public void onCreate() {
-        for (Application app : mApplications) {
-            app.onCreate();
+        for (DelegateMeta meta : mAppDelegateMetas) {
+            meta.getAppDelegate().onCreate();
         }
     }
 
 
     public void onTrimMemory(int level) {
-        for (Application app : mApplications) {
-            app.onTrimMemory(level);
+        for (DelegateMeta meta : mAppDelegateMetas) {
+            meta.getAppDelegate().onTrimMemory(level);
         }
     }
 
 
     public void onLowMemory() {
-        for (Application app : mApplications) {
-            app.onLowMemory();
+        for (DelegateMeta meta : mAppDelegateMetas) {
+            meta.getAppDelegate().onLowMemory();
         }
     }
 
 
     public void onTerminate() {
-        for (Application app : mApplications) {
-            app.onTerminate();
+        for (DelegateMeta meta : mAppDelegateMetas) {
+            meta.getAppDelegate().onTerminate();
         }
     }
 
 
     public void onConfigurationChanged(Configuration newConfig) {
-        for (Application app : mApplications) {
-            app.onConfigurationChanged(newConfig);
+        for (DelegateMeta meta : mAppDelegateMetas) {
+            meta.getAppDelegate().onConfigurationChanged(newConfig);
         }
     }
 }

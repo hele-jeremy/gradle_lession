@@ -4,13 +4,16 @@ import com.google.auto.service.AutoService;
 import com.jlpay.appdelegate_apt.util.Constants;
 import com.jlpay.delegate.anontation.ModuleComponent;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -29,6 +32,7 @@ import javax.lang.model.type.TypeMirror;
 public class ModuleComponentProcessor extends BaseProcessor {
 
     private TypeMirror mIAppLifecycleDelegate;
+    private TypeMirror mDelegateMetaElement;
 
     /**
      * 初始化
@@ -40,6 +44,7 @@ public class ModuleComponentProcessor extends BaseProcessor {
         super.init(processingEnvironment);
         //获取IAppLifecycleDelegate接口的TypeMirror
         mIAppLifecycleDelegate = mElementUitls.getTypeElement(Constants.IAPPLIFECYCLEDELEGATE).asType();
+        mDelegateMetaElement = mElementUitls.getTypeElement(Constants.DELEGATEMETA).asType();
     }
 
 
@@ -80,22 +85,15 @@ public class ModuleComponentProcessor extends BaseProcessor {
      *
      * @param moduleComponentElements
      */
-    private void parseModuleComponents(Set<? extends Element> moduleComponentElements) {
+    private void parseModuleComponents(Set<? extends Element> moduleComponentElements) throws IOException {
         if (CollectionUtils.isNotEmpty(moduleComponentElements)) {
             mLogger.info("parseModuleComponents....");
 
-            TypeElement lifeCycleDelegateElement = mElementUitls.getTypeElement(Constants.IAPPLIFECYCLEDELEGATE);
-            TypeMirror delegateMetaElement = mElementUitls.getTypeElement(Constants.DELEGATEMETA).asType();
-            mLogger.info("lifeCycleDelegateElement - " + lifeCycleDelegateElement);
-            mLogger.info("delegateMetaElement - " + delegateMetaElement);
-
-            //构建方法参数类型
+            //构建方法参数类型 以及方法参数名称
             //TreeSet<DelegateMeta> delegateMetaList
             ClassName treeSet = ClassName.get("java.util", "TreeSet");
-            TypeName delegateMeta = ClassName.get(delegateMetaElement);
+            TypeName delegateMeta = ClassName.get(mDelegateMetaElement);
             ParameterizedTypeName param = ParameterizedTypeName.get(treeSet, delegateMeta);
-
-            //构建方法参数名称
             ParameterSpec delegateMetaList = ParameterSpec.builder(param, "delegateMetaList").build();
 
             //构建方法collect
@@ -104,19 +102,49 @@ public class ModuleComponentProcessor extends BaseProcessor {
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(delegateMetaList);
 
-            //找出@ModuleComponent标记的类并生成java文件
+            //遍历所有被@ModuleComponent标记的类 并添加相应的方法体
             for (Element element : moduleComponentElements) {
                 TypeMirror tm = element.asType();
+                ModuleComponent moduleComponentAnnotation = element.getAnnotation(ModuleComponent.class);
+                int priority = moduleComponentAnnotation.priority();
 
-                if(!mTypes.isSubtype(tm,mIAppLifecycleDelegate)){
+                if (!mTypes.isSubtype(tm, mIAppLifecycleDelegate)) {
                     throw new RuntimeException("@ModuleComponent 标记的类必须实现IAppLifecycleDelegate接口...!");
                 }
 
+                if (!element.getKind().isClass()) {
+                    throw new RuntimeException("@ModuleComponent 标记的必须是一个class类...!");
+                }
+
+                Set<Modifier> modifiers = element.getModifiers();
+                Iterator<Modifier> iterator = modifiers.iterator();
+                boolean appDelegateIsAbstract = false;
+                while (CollectionUtils.isNotEmpty(modifiers) && iterator.hasNext()) {
+                    Modifier next = iterator.next();
+                    appDelegateIsAbstract = Modifier.ABSTRACT.equals(next);
+                }
+
+                if (appDelegateIsAbstract) {
+                    throw new RuntimeException("@ModuleComponent 标记的类不能是...abstract抽象类...!");
+                }
+
                 // TODO: 2021/7/23 DelegateMeta 的依赖问题
-//                DelegateMeta dm;
+                //构造方法体
+                collectMethod.addStatement("delegateMetaList.add(DelegateMeta.newBuild($L, new $T()))", priority, ClassName.get((TypeElement) element));
             }
 
+            //写入Java文件
+            String generateClassFileName = Constants.MODULE_NAME_PREFIX + mComponentName + Constants.MODULE_NAME_SUFFIX;
+            JavaFile.builder(Constants.PACKAGE_OF_GENERATE_APPDELEGATE_FILE,
+                    TypeSpec.classBuilder(generateClassFileName)
+                            .addJavadoc(Constants.WARN_TIPS_DOC)
+                            .addSuperinterface(ClassName.get(mElementUitls.getTypeElement(Constants.ILIFEDELEGATEGROUP)))
+                            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                            .addMethod(collectMethod.build())
+                            .build()
+            ).build().writeTo(mFiler);
 
+            mLogger.info(" 生成文件: " + generateClassFileName);
         }
     }
 

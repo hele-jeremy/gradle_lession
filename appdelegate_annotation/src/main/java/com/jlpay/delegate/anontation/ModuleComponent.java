@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface ModuleComponent {
     //组件初始化的优先级
-    int priority() default 100;
+    int priority() default Integer.MAX_VALUE;
 }

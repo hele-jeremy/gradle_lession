@@ -1,4 +1,5 @@
-package com.jeremy.gradle_lession;
+package com.jlpay.cart;
+
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -6,9 +7,8 @@ import android.content.res.Configuration;
 import com.jeremy.appdelegate.IAppLifecycleDelegate;
 import com.jlpay.delegate.anontation.ModuleComponent;
 
-
-@ModuleComponent(priority = 1)
-public class ModuleApplication implements IAppLifecycleDelegate {
+@ModuleComponent
+public final class CartTestApplication implements IAppLifecycleDelegate {
     @Override
     public void attachBaseContext(Context base) {
 
