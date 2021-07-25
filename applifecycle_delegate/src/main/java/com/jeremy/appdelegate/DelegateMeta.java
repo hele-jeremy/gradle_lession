@@ -2,7 +2,7 @@ package com.jeremy.appdelegate;
 
 public final class DelegateMeta implements Comparable<DelegateMeta> {
 
-    private int priority = 100;
+    private int priority;
     private IAppLifecycleDelegate appDelegate;
 
     public DelegateMeta(int priority, IAppLifecycleDelegate appDelegate) {
