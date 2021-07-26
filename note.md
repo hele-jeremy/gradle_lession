@@ -24,3 +24,13 @@ apt processor 远程调试:https://blog.csdn.net/u012823070/article/details/8923
 
 //gradle transform  + asm 
 https://juejin.cn/post/68449037809163960393
+https://add7.cc/android-base/shi-yong-asm-jin-hang-zi-jie-ma-cha-zhuang
+https://juejin.cn/post/6844904118700474375#heading-24
+https://juejin.cn/post/6844903473599741960
+https://juejin.cn/post/6844904072370192397#heading-2
+https://zhuanlan.zhihu.com/p/271599264
+https://www.jianshu.com/p/abba54baf617
+
+
+
+

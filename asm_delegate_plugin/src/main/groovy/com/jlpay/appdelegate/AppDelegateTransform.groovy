@@ -140,7 +140,7 @@ class AppDelegateTransform extends Transform {
                 Logger.i("dirAbsolutePath after -> " + dirAbsolutePath)
                 Logger.i("dirAbsolutePath after -> " + "\\\\")
                 //遍历文件夹获取每个class文件
-                directoryInput.file.eachFileRecurse { File file ->
+                directoryInput.file.eachFileRecurse { File file ->3
                     def path = file.absolutePath.replace(dirAbsolutePath,'')
                     Logger.i("eachFileRecurse path = " + path + " isLeftSlash = " + isLeftSlash)
                     if(!isLeftSlash){
