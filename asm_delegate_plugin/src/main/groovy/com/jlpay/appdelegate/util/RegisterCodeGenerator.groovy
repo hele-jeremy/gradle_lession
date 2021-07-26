@@ -54,8 +54,8 @@ class RegisterCodeGenerator {
                 def zipEntry = new ZipEntry(entryName)
                 def inputStream = file.getInputStream(zipEntry)
                 jarOutputStream.putNextEntry(zipEntry)
-                if (TransConstans.INSERT_BYTE_CODE_CLASS_FILE_NAME == entryName) {
-                    Logger.i("Insert init code to class -> " + entryName)
+                if (com.jlpay.asm.util.TransConstans.INSERT_BYTE_CODE_CLASS_FILE_NAME == entryName) {
+                    com.jlpay.asm.util.Logger.i("Insert init code to class -> " + entryName)
 
                     def bytes = referHackWhenInit(inputStream)
                     jarOutputStream.write(bytes)
@@ -96,8 +96,8 @@ class RegisterCodeGenerator {
         @Override
         MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
             MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions)
-            Logger.i("HackClassVisitor  visitMethod name -> " + name)
-            if (TransConstans.HACK_INIT_METHOD == name) {
+            com.jlpay.asm.util.Logger.i("HackClassVisitor  visitMethod name -> " + name)
+            if (com.jlpay.asm.util.TransConstans.HACK_INIT_METHOD == name) {
                 mv = new AppDelegateMethodVisitor(Opcodes.ASM5, mv, access, name, descriptor)
             }
             return mv
@@ -115,14 +115,14 @@ class RegisterCodeGenerator {
         @Override
         void visitCode() {
             super.visitCode()
-            Logger.i("AppDelegateMethodVisitor visitCode ---")
+            com.jlpay.asm.util.Logger.i("AppDelegateMethodVisitor visitCode ---")
 
         }
 
         @Override
         protected void onMethodEnter() {
             super.onMethodEnter()
-            Logger.i("AppDelegateMethodVisitor onMethodEnter ---")
+            com.jlpay.asm.util.Logger.i("AppDelegateMethodVisitor onMethodEnter ---")
 
 
         }
@@ -130,7 +130,7 @@ class RegisterCodeGenerator {
         @Override
         protected void onMethodExit(int opcode) {
             super.onMethodExit(opcode)
-            Logger.i("AppDelegateMethodVisitor onMethodExit ---")
+            com.jlpay.asm.util.Logger.i("AppDelegateMethodVisitor onMethodExit ---")
         }
     }
 }

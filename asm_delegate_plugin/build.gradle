@@ -1,5 +1,12 @@
+apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
+
+compileJava {
+    doFirst {
+        compileGroovy
+    }
+}
 
 dependencies {
     implementation gradleApi()
@@ -10,6 +17,9 @@ dependencies {
 
     implementation "org.ow2.asm:asm:7.1"
     implementation "org.ow2.asm:asm-commons:7.1"
+    //工具类
+    implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation 'org.apache.commons:commons-collections4:4.1'
 }
 
 //def group = "jlpay.appdelegate.plugin"
@@ -17,19 +27,13 @@ dependencies {
 //def artifactId = "app-delegate"
 
 // 设置源文件路径
-/*sourceSets {
+sourceSets {
     main {
-        groovy {
-            srcDir 'src/main/groovy'
-        }
-        java{
-            srcDir 'src/main/java'
-        }
-        resources {
-            srcDir 'src/main/resources'
-        }
+        java { srcDirs = [] }    // no source dirs for the java compiler
+        groovy { srcDirs = ["src/main/java", "src/main/groovy"] }
+        resources { srcDirs = ["src/main/resources"] }
     }
-}*/
+}
 
 
 group = "jlpay.appdelegate.plugin"

@@ -17,4 +17,6 @@ class TransConstans {
 
     //字节码插入的目标方法
     static final String HACK_INIT_METHOD = "loadModuleComponentsInfo"
+    //扫描类需要实现的接口
+    public static final String SCAN_CLASS_MATCH_INTERFACE  = "com/jeremy/appdelegate/ILifeDelegateGroup"
 }
