@@ -1,12 +1,12 @@
 package com.jlpay.appdelegate.util
 
-import jdk.internal.org.objectweb.asm.Opcodes
 import org.apache.commons.io.IOUtils
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.commons.AdviceAdapter
+import org.objectweb.asm.Opcodes
 
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -97,15 +97,15 @@ class RegisterCodeGenerator {
         MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
             MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions)
             Logger.i("HackClassVisitor  visitMethod name -> " + name)
-            if(TransConstans.HACK_INIT_METHOD == name){
-                mv = new AppDelegateMethodVisitor(Opcodes.ASM5,mv,access,name,descriptor)
+            if (TransConstans.HACK_INIT_METHOD == name) {
+                mv = new AppDelegateMethodVisitor(Opcodes.ASM5, mv, access, name, descriptor)
             }
             return mv
         }
     }
 
 
-    class AppDelegateMethodVisitor extends AdviceAdapter{
+    class AppDelegateMethodVisitor extends AdviceAdapter {
 
 
         protected AppDelegateMethodVisitor(int api, MethodVisitor methodVisitor, int access, String name, String descriptor) {
