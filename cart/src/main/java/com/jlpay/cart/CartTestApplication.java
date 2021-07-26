@@ -3,6 +3,7 @@ package com.jlpay.cart;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.Log;
 
 import com.jeremy.appdelegate.IAppLifecycleDelegate;
 import com.jlpay.delegate.anontation.ModuleComponent;
@@ -16,7 +17,7 @@ public final class CartTestApplication implements IAppLifecycleDelegate {
 
     @Override
     public void onCreate() {
-
+        Log.d("CartAppDelegate", "onCreate: CartTestApplication");
     }
 
     @Override

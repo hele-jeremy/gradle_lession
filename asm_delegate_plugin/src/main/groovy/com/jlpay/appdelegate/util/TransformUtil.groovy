@@ -1,6 +1,7 @@
 package com.jlpay.appdelegate.util
 
 import com.jlpay.asm.ScanClassVisitor
+import org.apache.commons.lang3.StringUtils
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
@@ -12,16 +13,20 @@ class TransformUtil {
     //要插桩子节码的文件
     static File INSERT_BYTE_CODE_CLASS_FILE
     //匹配条件的class文件名的集合
-    public static String TRANSFORM_CLASS_NAME_LIST  =  TransConstans.SCAN_CLASS_MATCH_INTERFACE
+    public static String TRANSFORM_CLASS_NAME_LIST = TransConstans.SCAN_CLASS_MATCH_INTERFACE
     public static ArrayList<String> SCAN_APT_GENERATE_CLASS_LIST = new ArrayList<>()
 
     /**
-     * 过滤掉不需要扫描的类
+     * 过滤掉不需要扫描的jar包
      * @param path
      * @return
      */
     static boolean shouldProcessPreDexJar(String path) {
         return !path.contains("androidx.") && !path.contains("/android/m2repository")
+    }
+
+    static boolean shouldProcessClass(String path) {
+        return StringUtils.isNotEmpty(path) && path.startsWith(TransConstans.PACKAGE_OF_GENERATE_APPDELEGATE_FILE)
     }
 
     /**
@@ -62,8 +67,12 @@ class TransformUtil {
     static void scanAptGenerateClass(InputStream inputStream) {
         ClassReader classReader = new ClassReader(inputStream)
         ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
-        classReader.accept(new ScanClassVisitor(Opcodes.ASM5,classWriter),ClassReader.EXPAND_FRAMES)
+        classReader.accept(new ScanClassVisitor(Opcodes.ASM5, classWriter), ClassReader.EXPAND_FRAMES)
         inputStream.close()
+    }
+
+    static void scanAptGenerateClass(File file) {
+        scanAptGenerateClass(new FileInputStream(file))
     }
 
 

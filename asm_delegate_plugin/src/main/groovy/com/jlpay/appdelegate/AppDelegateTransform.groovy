@@ -4,9 +4,11 @@ import com.android.build.api.transform.*
 import com.android.utils.FileUtils
 import com.google.common.collect.Sets
 import com.jlpay.appdelegate.util.Logger
+import com.jlpay.appdelegate.util.RegisterCodeGenerator
 import com.jlpay.appdelegate.util.TransConstans
 import com.jlpay.appdelegate.util.TransformUtil
 import org.apache.commons.codec.digest.DigestUtils
+import org.apache.commons.collections4.CollectionUtils
 import org.gradle.api.Project
 
 class AppDelegateTransform extends Transform {
@@ -75,14 +77,15 @@ class AppDelegateTransform extends Transform {
 //        super.transform(transformInvocation)
 
         Logger.i("start scacn appdegate info ------- ")
-        boolean isLeftSlash  = File.separator == "/"
+        def startTransformTime = System.currentTimeMillis()
+        boolean isLeftSlash = File.separator == "/"
         //拿到所有的class文件包含当前工程和直接以源码依赖的工程的class(目录文件夹的形式出现） 依赖的第三方库(jar包形式出现)
         Collection<TransformInput> transformInputs = transformInvocation.inputs
         //转换后的输出
         def outputProvider = transformInvocation.outputProvider
-        if (outputProvider != null && !isIncremental()) {
-            outputProvider.deleteAll()
-        }
+//        if (outputProvider != null && !isIncremental()) {
+//            outputProvider.deleteAll()
+//        }
 
         transformInputs.each { TransformInput transformInput ->
 
@@ -117,17 +120,6 @@ class AppDelegateTransform extends Transform {
 
             //遍历所有的class文件夹
             transformInput.directoryInputs.each { DirectoryInput directoryInput ->
-//                File dir = directoryInput.file
-
-//                if (dir) {
-//                    dir.traverse(type: FileType.FILES, nameFilter: ~/.*\.class/) { File file ->
-//                        Logger.i("dir find class---: " + file.name)
-//                        Logger.i("dir find class---: " + file.path)
-//                    }
-//                } else {
-//                    Logger.i("dir find class---**: " + dir.name)
-//                    Logger.i("dir find class---**: " + dir.path)
-//                }
 
                 //获取class文件夹的输出目录
                 def dest = outputProvider.getContentLocation(directoryInput.name, directoryInput.contentTypes, directoryInput.scopes, Format.DIRECTORY)
@@ -140,34 +132,37 @@ class AppDelegateTransform extends Transform {
                 Logger.i("dirAbsolutePath after -> " + dirAbsolutePath)
                 Logger.i("dirAbsolutePath after -> " + "\\\\")
                 //遍历文件夹获取每个class文件
-                directoryInput.file.eachFileRecurse { File file ->3
-                    def path = file.absolutePath.replace(dirAbsolutePath,'')
+                directoryInput.file.eachFileRecurse { File file ->
+                    def path = file.absolutePath.replace(dirAbsolutePath, '')
                     Logger.i("eachFileRecurse path = " + path + " isLeftSlash = " + isLeftSlash)
-                    if(!isLeftSlash){
+                    if (!isLeftSlash) {
                         //https://blog.wpjam.com/m/regrex-4-backslash/
-                        //编译源码时候进行编译平台的适配
-                        path =path.replaceAll("\\\\","/")
+                        //编译源码时候进行编译平台的适配例如windows和mac os文件路径分隔符是不一样的
+                        path = path.replaceAll("\\\\", "/")
                     }
-
-
+                    if (file.exists() && file.isFile() && TransformUtil.shouldProcessClass(path)) {
+                        TransformUtil.scanAptGenerateClass(file)
+                    }
                 }
 
-
+                //输出class文件目录到指定的输出路径中
                 FileUtils.copyDirectory(directoryInput.file, dest)
             }
 
 
         }
 
+        Logger.i("total scan transform time : " + (System.currentTimeMillis() - startTransformTime) + "ms")
         Logger.i("total appLifecycleDelegateList : " + TransformUtil.SCAN_APT_GENERATE_CLASS_LIST)
 
-        if (TransformUtil.INSERT_BYTE_CODE_CLASS_FILE) {
-            TransformUtil.TRANSFORM_CLASS_NAME_LIST.each { String className ->
-                Logger.i("each className : " + className)
-
-//                RegisterCodeGenerator.insertInitCode(appLifecycleDelegateList)
-
-
+        //扫描并收集好所有通过apt注解处理器自动生成的类信息后开始进行字节码的特定位置的插桩操作
+        if (TransformUtil.INSERT_BYTE_CODE_CLASS_FILE != null && TransformUtil.INSERT_BYTE_CODE_CLASS_FILE.exists()) {
+            if (CollectionUtils.isNotEmpty(TransformUtil.SCAN_APT_GENERATE_CLASS_LIST)) {
+                TransformUtil.SCAN_APT_GENERATE_CLASS_LIST.each { String aptClssname ->
+                    Logger.i("aptClssname -> " + aptClssname)
+                }
+                //开始执行字节码的注入
+                RegisterCodeGenerator.insertInitCode(TransformUtil.SCAN_APT_GENERATE_CLASS_LIST)
             }
         }
 

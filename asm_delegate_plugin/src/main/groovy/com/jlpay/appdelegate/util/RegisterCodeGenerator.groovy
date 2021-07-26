@@ -1,11 +1,11 @@
 package com.jlpay.appdelegate.util
 
+import com.jlpay.asm.HackClassVisitor
+import org.apache.commons.collections4.CollectionUtils
 import org.apache.commons.io.IOUtils
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.MethodVisitor
-import org.objectweb.asm.commons.AdviceAdapter
 import org.objectweb.asm.Opcodes
 
 import java.util.jar.JarEntry
@@ -20,16 +20,16 @@ class RegisterCodeGenerator {
     RegisterCodeGenerator(List<String> classNameList) {
         this.classNameList = classNameList
     }
-/**
- * 执行代码插入
- * @param classNameList
- */
+    /**
+     * 执行字节码代码插入
+     * @param classNameList
+     */
     static void insertInitCode(List<String> classNameList) {
-        if (classNameList != null && !classNameList.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(classNameList)) {
             RegisterCodeGenerator generator = new RegisterCodeGenerator(classNameList)
             File targetFile = TransformUtil.INSERT_BYTE_CODE_CLASS_FILE
-
-            if (targetFile != null && targetFile.name.endsWith(".jar")) {
+            Logger.i("insertInitCode targetFile -> " + targetFile)
+            if (targetFile != null && targetFile.exists() && targetFile.name.endsWith(".jar")) {
                 generator.insertInitCodeToJarFile(targetFile)
             }
         }
@@ -41,23 +41,27 @@ class RegisterCodeGenerator {
      */
     private void insertInitCodeToJarFile(File jarFile) {
         if (jarFile) {
+            Logger.i("insertInitCodeIntoJarFile jarFile.name -> " + jarFile.name)
             def optJar = new File(jarFile.getParent(), jarFile.name + ".opt")
             if (optJar.exists())
                 optJar.delete()
-
+            Logger.i("insertInitCodeIntoJarFile optJar -> " + optJar)
             def file = new JarFile(jarFile)
             def entries = file.entries()
             JarOutputStream jarOutputStream = new JarOutputStream(new FileOutputStream(optJar))
             while (entries != null && entries.hasMoreElements()) {
                 JarEntry jarEntry = entries.nextElement()
                 def entryName = jarEntry.getName()
+                Logger.i("insertInitCodeIntoJarFile entryName -> " + entryName)
                 def zipEntry = new ZipEntry(entryName)
                 def inputStream = file.getInputStream(zipEntry)
                 jarOutputStream.putNextEntry(zipEntry)
-                if (com.jlpay.asm.util.TransConstans.INSERT_BYTE_CODE_CLASS_FILE_NAME == entryName) {
-                    com.jlpay.asm.util.Logger.i("Insert init code to class -> " + entryName)
-
+                //找到要插入代码的目标类
+                if (TransConstans.INSERT_BYTE_CODE_CLASS_FILE_NAME == entryName) {
+                    Logger.i("Insert init code to class -> " + entryName)
+                    //ASM执行字节码的插桩
                     def bytes = referHackWhenInit(inputStream)
+                    //将插桩后的class重写写入jar包中
                     jarOutputStream.write(bytes)
                 } else {
                     jarOutputStream.write(IOUtils.toByteArray(inputStream))
@@ -73,7 +77,6 @@ class RegisterCodeGenerator {
             }
 
             optJar.renameTo(jarFile)
-
         }
     }
 
@@ -81,56 +84,10 @@ class RegisterCodeGenerator {
     //执行字节码插入的操作
     private byte[] referHackWhenInit(InputStream inputStream) {
         ClassReader cr = new ClassReader(inputStream)
-        ClassWriter cw = new ClassWriter(cr, 0)
+        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS)
         ClassVisitor cv = new HackClassVisitor(Opcodes.ASM5, cw)
         cr.accept(cv, ClassReader.EXPAND_FRAMES)
         return cw.toByteArray()
     }
 
-    class HackClassVisitor extends ClassVisitor {
-
-        HackClassVisitor(int api, ClassVisitor classVisitor) {
-            super(api, classVisitor)
-        }
-
-        @Override
-        MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-            MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions)
-            com.jlpay.asm.util.Logger.i("HackClassVisitor  visitMethod name -> " + name)
-            if (com.jlpay.asm.util.TransConstans.HACK_INIT_METHOD == name) {
-                mv = new AppDelegateMethodVisitor(Opcodes.ASM5, mv, access, name, descriptor)
-            }
-            return mv
-        }
-    }
-
-
-    class AppDelegateMethodVisitor extends AdviceAdapter {
-
-
-        protected AppDelegateMethodVisitor(int api, MethodVisitor methodVisitor, int access, String name, String descriptor) {
-            super(api, methodVisitor, access, name, descriptor)
-        }
-
-        @Override
-        void visitCode() {
-            super.visitCode()
-            com.jlpay.asm.util.Logger.i("AppDelegateMethodVisitor visitCode ---")
-
-        }
-
-        @Override
-        protected void onMethodEnter() {
-            super.onMethodEnter()
-            com.jlpay.asm.util.Logger.i("AppDelegateMethodVisitor onMethodEnter ---")
-
-
-        }
-
-        @Override
-        protected void onMethodExit(int opcode) {
-            super.onMethodExit(opcode)
-            com.jlpay.asm.util.Logger.i("AppDelegateMethodVisitor onMethodExit ---")
-        }
-    }
 }
