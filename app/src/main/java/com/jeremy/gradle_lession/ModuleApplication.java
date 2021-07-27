@@ -2,6 +2,7 @@ package com.jeremy.gradle_lession;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.Log;
 
 import com.jeremy.appdelegate.IAppLifecycleDelegate;
 import com.jlpay.delegate.anontation.ModuleComponent;
@@ -11,12 +12,12 @@ import com.jlpay.delegate.anontation.ModuleComponent;
 public class ModuleApplication implements IAppLifecycleDelegate {
     @Override
     public void attachBaseContext(Context base) {
-
+        Log.d("AppDelegate", "attachBaseContext: ModuleApplication -> " + base);
     }
 
     @Override
     public void onCreate() {
-
+        Log.d("AppDelegate", "onCreate: ModuleApplication");
     }
 
     @Override

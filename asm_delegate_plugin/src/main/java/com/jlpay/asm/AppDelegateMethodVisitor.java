@@ -19,28 +19,31 @@ public class AppDelegateMethodVisitor extends AdviceAdapter {
 
     @Override
     public void visitCode() {
-        super.visitCode();
         Logger.i("AppDelegateMethodVisitor visitCode ---");
+        super.visitCode();
     }
 
     @Override
     protected void onMethodEnter() {
         super.onMethodEnter();
         Logger.i("AppDelegateMethodVisitor onMethodEnter ---");
+    }
+
+
+    @Override
+    public void visitInsn(int opcode) {
         ArrayList<String> list = TransformUtil.SCAN_APT_GENERATE_CLASS_LIST;
         for (String aptClassName : list) {
-            Logger.i("onMethodEnter aptClassName -> " + aptClassName);
+            Logger.i("visitInsn aptClassName -> " + aptClassName);
             mv.visitTypeInsn(Opcodes.NEW, aptClassName);
             mv.visitInsn(Opcodes.DUP);
             mv.visitMethodInsn(Opcodes.INVOKESPECIAL, aptClassName, "<init>", "()V", false);
             mv.visitVarInsn(Opcodes.ALOAD, 0);
             mv.visitFieldInsn(Opcodes.GETFIELD, TransConstans.INSERT_BYTE_CODE_CLASS_PATH, "mAppDelegateMetas", "Ljava/util/TreeSet;");
             mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, aptClassName, "collect", "(Ljava/util/TreeSet;)V", false);
-            mv.visitInsn(Opcodes.POP);
-
+//            mv.visitInsn(Opcodes.POP);
         }
-
-
+        super.visitInsn(opcode);
     }
 
     @Override

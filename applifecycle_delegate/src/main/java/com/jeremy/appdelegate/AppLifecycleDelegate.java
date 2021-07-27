@@ -25,7 +25,7 @@ public final class AppLifecycleDelegate {
      * 字节码插桩将需要进行生命周期派发的类在该方法中添加到mApplications集合中
      */
     private void loadModuleComponentsInfo() {
-        new TestAppLifecycleDelegate().collect(mAppDelegateMetas);
+
     }
 
 

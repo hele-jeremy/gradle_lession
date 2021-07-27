@@ -12,12 +12,12 @@ import com.jlpay.delegate.anontation.ModuleComponent;
 public final class CartTestApplication implements IAppLifecycleDelegate {
     @Override
     public void attachBaseContext(Context base) {
-
+        Log.d("AppDelegate", "attachBaseContext: CartTestApplication -> " + base);
     }
 
     @Override
     public void onCreate() {
-        Log.d("CartAppDelegate", "onCreate: CartTestApplication");
+        Log.d("AppDelegate", "onCreate: CartTestApplication");
     }
 
     @Override

@@ -166,9 +166,6 @@ class AppDelegateTransform extends Transform {
             }
         }
 
-
         Logger.i("end scacn appdegate info ------- ")
-
-
     }
 }

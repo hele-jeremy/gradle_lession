@@ -11,12 +11,12 @@ import com.jlpay.delegate.anontation.ModuleComponent;
 public class  Cart2Application implements IAppLifecycleDelegate {
     @Override
     public void attachBaseContext(Context base) {
-
+        Log.d("AppDelegate", "attachBaseContext: Cart2Application -> " + base);
     }
 
     @Override
     public void onCreate() {
-        Log.d("CartAppDelegate", "onCreate: Cart2Application");
+        Log.d("AppDelegate", "onCreate: Cart2Application");
     }
 
     @Override
