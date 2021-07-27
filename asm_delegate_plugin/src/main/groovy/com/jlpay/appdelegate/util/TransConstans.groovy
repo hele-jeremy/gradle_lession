@@ -9,13 +9,6 @@ class TransConstans {
     public static final String INSERT_BYTE_CODE_CLASS_PATH = "com/jeremy/appdelegate/AppLifecycleDelegate"
     //要进行字节码插桩的类
     static final String INSERT_BYTE_CODE_CLASS_FILE_NAME = INSERT_BYTE_CODE_CLASS_PATH + CLAZZ
-
-    static final String SEPARATOR = "\$\$"
-    //生成类 类名的前缀
-    static final String MODULE_NAME_PREFIX = "Jlpay" + SEPARATOR;
-    //生成类 类名的后缀
-    static final String MODULE_NAME_SUFFIX = SEPARATOR + "AppDelegate" + CLAZZ
-
     //字节码插入的目标方法
     public static final String HACK_INIT_METHOD = "loadModuleComponentsInfo"
     //扫描类需要实现的接口

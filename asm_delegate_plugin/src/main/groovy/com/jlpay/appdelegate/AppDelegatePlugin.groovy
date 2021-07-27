@@ -2,10 +2,9 @@ package com.jlpay.appdelegate
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
-import com.jlpay.appdelegate.util.TransformUtil
+import com.jlpay.appdelegate.util.Logger
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import com.jlpay.appdelegate.util.Logger
 
 class AppDelegatePlugin implements Plugin<Project> {
 

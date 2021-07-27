@@ -25,7 +25,9 @@ public final class AppLifecycleDelegate {
      * 字节码插桩将需要进行生命周期派发的类在该方法中添加到mApplications集合中
      */
     private void loadModuleComponentsInfo() {
-
+        //插入代码类似以下形式
+//        (new Jlpay$$cart$.AppDelegate()).collect(this.mAppDelegateMetas);
+//        (new Jlpay$$app$.AppDelegate()).collect(this.mAppDelegateMetas);
     }
 
 

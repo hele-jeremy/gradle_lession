@@ -30,6 +30,10 @@ public class AppDelegateMethodVisitor extends AdviceAdapter {
     }
 
 
+    /**
+     * 执行代码的插入
+     * @param opcode
+     */
     @Override
     public void visitInsn(int opcode) {
         ArrayList<String> list = TransformUtil.SCAN_APT_GENERATE_CLASS_LIST;

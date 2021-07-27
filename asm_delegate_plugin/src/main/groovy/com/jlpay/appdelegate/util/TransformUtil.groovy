@@ -1,5 +1,6 @@
 package com.jlpay.appdelegate.util
 
+import com.jlpay.asm.ScanAppComponentClassVisitor
 import com.jlpay.asm.ScanClassVisitor
 import org.apache.commons.lang3.StringUtils
 import org.objectweb.asm.ClassReader
@@ -7,13 +8,11 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
 
 import java.util.jar.JarEntry
-import java.util.jar.JarFile;
+import java.util.jar.JarFile
 
 class TransformUtil {
     //要插桩子节码的文件
     static File INSERT_BYTE_CODE_CLASS_FILE
-    //匹配条件的class文件名的集合
-    public static String TRANSFORM_CLASS_NAME_LIST = TransConstans.SCAN_CLASS_MATCH_INTERFACE
     public static ArrayList<String> SCAN_APT_GENERATE_CLASS_LIST = new ArrayList<>()
 
     /**
@@ -53,6 +52,11 @@ class TransformUtil {
                     InputStream inputStream = jarFiles.getInputStream(element)
                     scanAptGenerateClass(inputStream)
                     inputStream.close()
+                } else {
+                    //扫描标记了@AppComponent注解的类
+                    InputStream scanAppComponentStream = jarFiles.getInputStream(element)
+                    scanAppComponentClass(scanAppComponentStream)
+                    scanAppComponentStream.close()
                 }
             }
             jarFiles.close()
@@ -66,8 +70,9 @@ class TransformUtil {
      */
     static void scanAptGenerateClass(InputStream inputStream) {
         ClassReader classReader = new ClassReader(inputStream)
-        ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
-        classReader.accept(new ScanClassVisitor(Opcodes.ASM5, classWriter), ClassReader.EXPAND_FRAMES)
+//        ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
+//        classReader.accept(new ScanClassVisitor(Opcodes.ASM5), ClassReader.EXPAND_FRAMES)
+        classReader.accept(new ScanClassVisitor(Opcodes.ASM5), 0)
         inputStream.close()
     }
 
@@ -76,12 +81,12 @@ class TransformUtil {
     }
 
 
-    static boolean isTargetClass(File file) {
-        Logger.i("isTargetClass : " + file.name)
-        if (file != null && file.name.startsWith(TransConstans.MODULE_NAME_PREFIX) && file.name.endsWith(TransConstans.MODULE_NAME_SUFFIX)) {
-            return true
-        }
-        return false
+    static void scanAppComponentClass(InputStream inputStream) {
+        ClassReader reader = new ClassReader(inputStream)
+//        ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS)
+//        reader.accept(new ScanAppComponentClassVisitor(Opcodes.ASM5), ClassReader.EXPAND_FRAMES)
+        reader.accept(new ScanAppComponentClassVisitor(Opcodes.ASM5), 0)
+        inputStream.close()
     }
 
 }
