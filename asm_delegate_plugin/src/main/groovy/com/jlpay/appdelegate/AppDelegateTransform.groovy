@@ -9,6 +9,7 @@ import com.jlpay.appdelegate.util.TransConstans
 import com.jlpay.appdelegate.util.TransformUtil
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.collections4.CollectionUtils
+import org.apache.commons.collections4.MapUtils
 import org.gradle.api.Project
 
 class AppDelegateTransform extends Transform {
@@ -143,6 +144,10 @@ class AppDelegateTransform extends Transform {
                     if (file.exists() && file.isFile() && TransformUtil.shouldProcessClass(path)) {
                         TransformUtil.scanAptGenerateClass(file)
                     }
+                    if (file.exists() && file.isFile()) {
+                        TransformUtil.scanAppComponentClass(file)
+                    }
+
                 }
 
                 //输出class文件目录到指定的输出路径中
@@ -164,6 +169,16 @@ class AppDelegateTransform extends Transform {
                 //开始执行字节码的注入
                 RegisterCodeGenerator.insertInitCode(TransformUtil.SCAN_APT_GENERATE_CLASS_LIST)
             }
+        }
+
+        //在@AppComponent注解标记的类中注入代码
+        if(MapUtils.isNotEmpty(TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS)){
+            Set<Map.Entry<File, List<String>>> entrySet = TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS.entrySet()
+            for (Map.Entry<File, List<String>> entry : entrySet) {
+                Logger.i("file -> " + entry.key.absolutePath + "\n")
+                Logger.i("classs -> " + entry.value + "\n")
+            }
+            RegisterCodeGenerator.insertAppComponentInitCode(TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS)
         }
 
         Logger.i("end scacn appdegate info ------- ")

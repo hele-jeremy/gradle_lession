@@ -35,6 +35,18 @@ class RegisterCodeGenerator {
         }
     }
 
+    static void insertAppComponentInitCode(Map<File, List<String>> appMaps) {
+        RegisterCodeGenerator generator = new RegisterCodeGenerator()
+        generator.insertAppInitCodeToFileOrJarFile()
+    }
+
+    /**
+     * 插入代码到 @Appcomponent注解标记的类中
+     */
+    private void insertAppInitCodeToFileOrJarFile() {
+
+    }
+
     /***
      * 插入代码到jar包中
      * @param jarFile

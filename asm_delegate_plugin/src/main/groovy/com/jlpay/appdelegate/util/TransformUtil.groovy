@@ -4,7 +4,6 @@ import com.jlpay.asm.ScanAppComponentClassVisitor
 import com.jlpay.asm.ScanClassVisitor
 import org.apache.commons.lang3.StringUtils
 import org.objectweb.asm.ClassReader
-import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
 
 import java.util.jar.JarEntry
@@ -14,6 +13,7 @@ class TransformUtil {
     //要插桩子节码的文件
     static File INSERT_BYTE_CODE_CLASS_FILE
     public static ArrayList<String> SCAN_APT_GENERATE_CLASS_LIST = new ArrayList<>()
+    public static Map<File, List<String>> SCAN_APPCOMPONENT_MARK_CLASS = new HashMap<>()
 
     /**
      * 过滤掉不需要扫描的jar包
@@ -47,17 +47,27 @@ class TransformUtil {
                     // 标记这个jar包包含 AppLifecycleDelegate.class
                     //后续扫描结束后，我们会生成注册代码到这个jar包里
                     INSERT_BYTE_CODE_CLASS_FILE = dest
-                } else if (name.startsWith(TransConstans.PACKAGE_OF_GENERATE_APPDELEGATE_FILE)) {
+                    return
+                }
+                if (name.startsWith(TransConstans.PACKAGE_OF_GENERATE_APPDELEGATE_FILE)) {
                     //找到我们注解自动生成的类
                     InputStream inputStream = jarFiles.getInputStream(element)
                     scanAptGenerateClass(inputStream)
                     inputStream.close()
-                } else {
+                }
+
+                //扫描所有的标记了@AppComponent注解的类
+                Logger.i("before scanAppComponentClass -> " + name)
+                //有些jar包中可能包含元信息类似于 META-INF/这样的文件夹需要过滤掉这种文件
+                //apt注解工程的 jar包可能扫描就不全都是 class文件 需要 注意
+                if (name.endsWith(TransConstans.CLAZZ)) {
+                    Logger.i("after scanAppComponentClass -> " + name)
                     //扫描标记了@AppComponent注解的类
                     InputStream scanAppComponentStream = jarFiles.getInputStream(element)
-                    scanAppComponentClass(scanAppComponentStream)
+                    scanAppComponentClass(scanAppComponentStream, dest)
                     scanAppComponentStream.close()
                 }
+
             }
             jarFiles.close()
         }
@@ -81,12 +91,16 @@ class TransformUtil {
     }
 
 
-    static void scanAppComponentClass(InputStream inputStream) {
+    static void scanAppComponentClass(InputStream inputStream, File target) {
         ClassReader reader = new ClassReader(inputStream)
 //        ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS)
 //        reader.accept(new ScanAppComponentClassVisitor(Opcodes.ASM5), ClassReader.EXPAND_FRAMES)
-        reader.accept(new ScanAppComponentClassVisitor(Opcodes.ASM5), 0)
+        reader.accept(new ScanAppComponentClassVisitor(Opcodes.ASM5,target), 0)
         inputStream.close()
+    }
+
+    static void scanAppComponentClass(File file) {
+        scanAppComponentClass(new FileInputStream(file), file)
     }
 
 }

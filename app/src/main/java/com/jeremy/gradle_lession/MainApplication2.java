@@ -1,15 +1,14 @@
 package com.jeremy.gradle_lession;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
 import com.jeremy.appdelegate.AppLifecycleDelegate;
 import com.jlpay.delegate.anontation.AppComponent;
 
-import java.io.Serializable;
-
 @AppComponent
-public class MainApplication extends AppBase implements Serializable {
+public class MainApplication2 extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {

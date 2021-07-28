@@ -27,7 +27,7 @@ public class ScanClassVisitor extends ClassVisitor {
      */
     @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-        Logger.i("ScanClassVisitor  visitAnnotation  :  " + descriptor + " " + visible);
+        Logger.i("scan visitAnnotation :  " + descriptor + " " + visible);
         return super.visitAnnotation(descriptor, visible);
     }
 
