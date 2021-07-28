@@ -167,16 +167,16 @@ class AppDelegateTransform extends Transform {
                     Logger.i("aptClssname -> " + aptClssname)
                 }
                 //开始执行字节码的注入
-                RegisterCodeGenerator.insertInitCode(TransformUtil.SCAN_APT_GENERATE_CLASS_LIST)
+                RegisterCodeGenerator.insertInitCode()
             }
         }
 
         //在@AppComponent注解标记的类中注入代码
-        if(MapUtils.isNotEmpty(TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS)){
+        if (MapUtils.isNotEmpty(TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS)) {
             Set<Map.Entry<File, List<String>>> entrySet = TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS.entrySet()
             for (Map.Entry<File, List<String>> entry : entrySet) {
-                Logger.i("file -> " + entry.key.absolutePath + "\n")
-                Logger.i("classs -> " + entry.value + "\n")
+                Logger.i("appcomponent file -> " + entry.key.absolutePath + "\n")
+                Logger.i("appcomponent classs -> " + entry.value + "\n")
             }
             RegisterCodeGenerator.insertAppComponentInitCode(TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS)
         }
