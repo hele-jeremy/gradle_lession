@@ -2,6 +2,7 @@ package com.jeremy.appdelegate;
 
 public final class DelegateMeta implements Comparable<DelegateMeta> {
 
+    //执行的优先级，值越小优先级越高
     private int priority;
     private IAppLifecycleDelegate appDelegate;
 
@@ -25,7 +26,14 @@ public final class DelegateMeta implements Comparable<DelegateMeta> {
 
     @Override
     public int compareTo(DelegateMeta delegateMeta) {
-        return this.priority = delegateMeta.getPriority();
+        try {
+            int ret = this.priority - delegateMeta.getPriority();
+            return  ret == 0 ? 1 : ret;
+//            return this.priority - delegateMeta.getPriority();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override

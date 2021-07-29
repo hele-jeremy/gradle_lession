@@ -53,6 +53,7 @@ class RegisterCodeGenerator {
                 }
             } else {
                 for (String className : classNames) {
+                    Logger.i("insertAppInitCodeToFileOrJarFile jar -> " + className + " " + file.absolutePath)
                     insertAppComponentInitCodeToJarFile(file, className)
                 }
 
@@ -63,24 +64,26 @@ class RegisterCodeGenerator {
 
     private void insertAppComponentInitCodeToJarFile(File jarFile, String className) {
         if (jarFile != null && jarFile.exists() && jarFile.isFile() && StringUtils.isNotEmpty(className)) {
-            Logger.i("insertInitCodeIntoJarFile jarFile.name -> " + jarFile.name)
+            Logger.i("insertAppComponentInitCodeToJarFile jarFile.name -> " + jarFile.name)
             def optJar = new File(jarFile.getParent(), jarFile.name + ".opt")
-            if (optJar.exists())
+            if (optJar.exists()) {
                 optJar.delete()
-            Logger.i("insertInitCodeIntoJarFile optJar -> " + optJar)
+            }
+            Logger.i("insertAppComponentInitCodeToJarFile optJar -> " + optJar)
             def file = new JarFile(jarFile)
             def entries = file.entries()
             JarOutputStream jarOutputStream = new JarOutputStream(new FileOutputStream(optJar))
             while (entries != null && entries.hasMoreElements()) {
                 JarEntry jarEntry = entries.nextElement()
                 def entryName = jarEntry.getName()
-                Logger.i("insertInitCodeIntoJarFile entryName -> " + entryName)
+                Logger.i("insertAppComponentInitCodeToJarFile entryName -> " + entryName)
                 def zipEntry = new ZipEntry(entryName)
                 def inputStream = file.getInputStream(zipEntry)
                 jarOutputStream.putNextEntry(zipEntry)
+                Logger.i("insertAppComponentInitCodeToJarFile match class -> " + (className + TransConstans.CLAZZ))
                 //找到要插入代码的目标类
                 if (StringUtils.equals(className + TransConstans.CLAZZ, entryName)) {
-                    Logger.i("Insert initAppcomponent code to class -> " + entryName)
+                    Logger.i("insertAppComponentInitCodeToJarFile code to class -> " + entryName)
                     //ASM执行字节码的插桩
                     def bytes = referHackAppComponentWhenInit(inputStream)
                     //将插桩后的class重写写入jar包中

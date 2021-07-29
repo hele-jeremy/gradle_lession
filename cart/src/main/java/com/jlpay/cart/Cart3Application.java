@@ -7,7 +7,7 @@ import android.util.Log;
 import com.jeremy.appdelegate.IAppLifecycleDelegate;
 import com.jlpay.delegate.anontation.ModuleComponent;
 
-@ModuleComponent(priority = 129)
+@ModuleComponent(priority = 3)
 public class Cart3Application implements IAppLifecycleDelegate {
     @Override
     public void attachBaseContext(Context base) {

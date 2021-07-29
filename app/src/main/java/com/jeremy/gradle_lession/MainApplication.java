@@ -1,19 +1,13 @@
 package com.jeremy.gradle_lession;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.util.Log;
-
 import com.jlpay.base.BaseApplication;
 import com.jlpay.delegate.anontation.AppComponent;
 
-import java.io.Serializable;
-
 @AppComponent
-public class MainApplication extends BaseApplication implements Serializable {
+public class MainApplication extends BaseApplication {
 
 
-    //        AppLifecycleDelegate.get().attachBaseContext(base);
+   /* //        AppLifecycleDelegate.get().attachBaseContext(base);
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -31,7 +25,7 @@ public class MainApplication extends BaseApplication implements Serializable {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
+    }*/
 
 
 }

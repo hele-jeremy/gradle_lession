@@ -84,9 +84,9 @@ class AppDelegateTransform extends Transform {
         Collection<TransformInput> transformInputs = transformInvocation.inputs
         //转换后的输出
         def outputProvider = transformInvocation.outputProvider
-//        if (outputProvider != null && !isIncremental()) {
-//            outputProvider.deleteAll()
-//        }
+        if (outputProvider != null && !isIncremental()) {
+            outputProvider.deleteAll()
+        }
 
         transformInputs.each { TransformInput transformInput ->
 
@@ -145,7 +145,7 @@ class AppDelegateTransform extends Transform {
                         TransformUtil.scanAptGenerateClass(file)
                     }
                     if (file.exists() && file.isFile()) {
-                        TransformUtil.scanAppComponentClass(file,dest)
+                        TransformUtil.scanAppComponentClass(file, dest)
                     }
 
                 }
