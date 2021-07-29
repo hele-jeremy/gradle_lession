@@ -1,12 +1,12 @@
 package com.jlpay.cart;
 
-import android.app.Application;
 import android.content.Context;
 
+import com.jlpay.base.BaseApplication;
 import com.jlpay.delegate.anontation.AppComponent;
 
 @AppComponent
-public class AppApplication extends Application {
+public class AppApplication extends BaseApplication {
 
     @Override
     protected void attachBaseContext(Context base) {

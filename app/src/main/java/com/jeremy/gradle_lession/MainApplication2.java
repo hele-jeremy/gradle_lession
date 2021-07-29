@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.jeremy.appdelegate.AppLifecycleDelegate;
 import com.jlpay.delegate.anontation.AppComponent;
 
 @AppComponent

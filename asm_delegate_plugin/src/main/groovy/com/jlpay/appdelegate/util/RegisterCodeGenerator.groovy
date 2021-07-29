@@ -52,7 +52,6 @@ class RegisterCodeGenerator {
                     hackAppComponentInitCodeInFile(hackFile)
                 }
             } else {
-
                 for (String className : classNames) {
                     insertAppComponentInitCodeToJarFile(file, className)
                 }
@@ -81,7 +80,7 @@ class RegisterCodeGenerator {
                 jarOutputStream.putNextEntry(zipEntry)
                 //找到要插入代码的目标类
                 if (StringUtils.equals(className + TransConstans.CLAZZ, entryName)) {
-                    Logger.i("Insert init code to class -> " + entryName)
+                    Logger.i("Insert initAppcomponent code to class -> " + entryName)
                     //ASM执行字节码的插桩
                     def bytes = referHackAppComponentWhenInit(inputStream)
                     //将插桩后的class重写写入jar包中
