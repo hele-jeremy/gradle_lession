@@ -26,6 +26,14 @@ public class HackAppComponentClassVisitor extends ClassVisitor {
     }
 
 
+    /**
+     * @param access
+     * @param name
+     * @param descriptor
+     * @param signature
+     * @param exceptions
+     * @return
+     */
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         Logger.i("HackAppComponentClassVisitor visitMethod -> " + access + " " + name + " " + descriptor);
@@ -34,22 +42,22 @@ public class HackAppComponentClassVisitor extends ClassVisitor {
         switch (methodDefine) {
             case "attachBaseContext (Landroid/content/Context;)V":
                 isAttachBaseContextMethodDefined = true;
-                return new AppComponentMethodVisitor(methodVisitor,name, descriptor);
+                return new AppComponentMethodVisitor(methodVisitor, name, descriptor, true, false);
             case "onCreate ()V":
                 isOnCreateMethodDefined = true;
-                return new AppComponentMethodVisitor(methodVisitor,name, descriptor);
+                return new AppComponentMethodVisitor(methodVisitor, name, descriptor, false, false);
             case "onTrimMemory (I)V":
                 isOnTrimMemoryMethodDefined = true;
-                return new AppComponentMethodVisitor(methodVisitor,name, descriptor);
+                return new AppComponentMethodVisitor(methodVisitor, name, descriptor, false, true);
             case "onConfigurationChanged (Landroid/content/res/Configuration;)V":
                 isOnConfigurationChangedMethodDefined = true;
-                return new AppComponentMethodVisitor(methodVisitor,name, descriptor);
+                return new AppComponentMethodVisitor(methodVisitor, name, descriptor, true, false);
             case "onLowMemory ()V":
                 isOnLowMemoryMethodDefined = true;
-                return new AppComponentMethodVisitor(methodVisitor,name, descriptor);
+                return new AppComponentMethodVisitor(methodVisitor, name, descriptor, false, false);
             case "onTerminate ()V":
                 isOnTerminateMethodDefined = true;
-                return new AppComponentMethodVisitor(methodVisitor,name, descriptor);
+                return new AppComponentMethodVisitor(methodVisitor, name, descriptor, false, false);
         }
 
         return methodVisitor;
@@ -59,28 +67,29 @@ public class HackAppComponentClassVisitor extends ClassVisitor {
     public void visitEnd() {
         super.visitEnd();
         if (!isAttachBaseContextMethodDefined) {
-            definedMethod(4,"attachBaseContext","(Landroid/content/Context;)V");
+            definedMethod(4, "attachBaseContext", "(Landroid/content/Context;)V");
         }
         if (!isOnCreateMethodDefined) {
-            definedMethod(1,"onCreate","()V");
+            definedMethod(1, "onCreate", "()V");
         }
 
         if (!isOnTrimMemoryMethodDefined) {
-            definedMethod(1,"onTrimMemory","(I)V");
+            definedMethod(1, "onTrimMemory", "(I)V");
         }
         if (!isOnLowMemoryMethodDefined) {
-            definedMethod(1,"onLowMemory","()V");
+            definedMethod(1, "onLowMemory", "()V");
         }
         if (!isOnConfigurationChangedMethodDefined) {
-            definedMethod(1,"onConfigurationChanged","(Landroid/content/res/Configuration;)V");
+            definedMethod(1, "onConfigurationChanged", "(Landroid/content/res/Configuration;)V");
         }
         if (!isOnTerminateMethodDefined) {
-            definedMethod(1,"onTerminate","()V");
+            definedMethod(1, "onTerminate", "()V");
         }
     }
 
     /**
      * 没有哪个方法就添加哪个方法
+     *
      * @param modifier
      * @param methodName
      * @param desc

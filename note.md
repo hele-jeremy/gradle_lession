@@ -30,6 +30,8 @@ https://juejin.cn/post/6844903473599741960
 https://juejin.cn/post/6844904072370192397#heading-2
 https://zhuanlan.zhihu.com/p/271599264
 https://www.jianshu.com/p/abba54baf617
+https://blog.csdn.net/aesop_wubo/article/details/48948211（Opcodes.ALOAD,Opcodes.ILOAD指令详解）
+https://zhuanlan.zhihu.com/p/94498015?hmsr=toutiao.io（ASM子节码的介绍）
 
 
 

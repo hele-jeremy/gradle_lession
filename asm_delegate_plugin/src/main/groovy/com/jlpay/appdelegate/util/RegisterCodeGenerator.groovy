@@ -2,7 +2,6 @@ package com.jlpay.appdelegate.util
 
 import com.jlpay.asm.HackAppComponentClassVisitor
 import com.jlpay.asm.HackClassVisitor
-import org.apache.commons.collections4.CollectionUtils
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
 import org.objectweb.asm.ClassReader
@@ -29,7 +28,7 @@ class RegisterCodeGenerator {
         }
     }
 
-    static void insertAppComponentInitCode(Map<File, List<String>> appMaps) {
+    static void insertAppComponentInitCode() {
         RegisterCodeGenerator generator = new RegisterCodeGenerator()
         generator.insertAppInitCodeToFileOrJarFile()
     }
@@ -76,7 +75,7 @@ class RegisterCodeGenerator {
                 def inputStream = file.getInputStream(zipEntry)
                 jarOutputStream.putNextEntry(zipEntry)
                 //找到要插入代码的目标类
-                if (StringUtils.equals(className + TransConstans.CLAZZ,entryName)) {
+                if (StringUtils.equals(className + TransConstans.CLAZZ, entryName)) {
                     Logger.i("Insert init code to class -> " + entryName)
                     //ASM执行字节码的插桩
                     def bytes = referHackAppComponentWhenInit(inputStream)

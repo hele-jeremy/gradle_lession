@@ -150,6 +150,8 @@ class AppDelegateTransform extends Transform {
 
                 }
 
+                Logger.i("directoryInput.file -> " + directoryInput.file)
+                Logger.i("directoryInput.dest -> " + dest)
                 //输出class文件目录到指定的输出路径中
                 FileUtils.copyDirectory(directoryInput.file, dest)
             }
@@ -178,7 +180,7 @@ class AppDelegateTransform extends Transform {
                 Logger.i("appcomponent file -> " + entry.key.absolutePath + "\n")
                 Logger.i("appcomponent classs -> " + entry.value + "\n")
             }
-            RegisterCodeGenerator.insertAppComponentInitCode(TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS)
+            RegisterCodeGenerator.insertAppComponentInitCode()
         }
 
         Logger.i("end scacn appdegate info ------- ")
