@@ -43,9 +43,14 @@ class RegisterCodeGenerator {
             List<String> classNames = entry.value
             String tartFilePath = file.absolutePath
 
-            if (tartFilePath.endsWith(TransConstans.CLAZZ)) {
-                //是class文件类型
-                hackAppComponentInitCodeInFile(file)
+            if (file != null && file.exists() && file.isDirectory()) {
+                Logger.i("insertAppInitCodeToFileOrJarFile file -> " + tartFilePath)
+                for (String className : classNames) {
+                    File hackFile = new File(file, File.separator + className + TransConstans.CLAZZ)
+                    Logger.i("insertAppInitCodeToFileOrJarFile hackFile -> " + hackFile.absolutePath)
+                    //是class文件类型
+                    hackAppComponentInitCodeInFile(hackFile)
+                }
             } else {
 
                 for (String className : classNames) {

@@ -55,12 +55,12 @@ public class AppComponentMethodVisitor extends MethodVisitor {
 
         //通过判断Opcodes的return码来保证插入的子节码在return之前生效
         switch (opcode) {
-//            case Opcodes.IRETURN:
-//            case Opcodes.ARETURN:
+            case Opcodes.IRETURN:
+            case Opcodes.ARETURN:
             case Opcodes.RETURN:
-//            case Opcodes.FRETURN:
-//            case Opcodes.DRETURN:
-//            case Opcodes.LRETURN:
+            case Opcodes.FRETURN:
+            case Opcodes.DRETURN:
+            case Opcodes.LRETURN:
                 Logger.i("AppComponentMethodVisitor visitInsn -> " + opcode);
                 //调用AppLifecycleDelegate中的get()方法
                 mv.visitMethodInsn(Opcodes.INVOKESTATIC, "com/jeremy/appdelegate/AppLifecycleDelegate", "get", "()Lcom/jeremy/appdelegate/AppLifecycleDelegate;", false);

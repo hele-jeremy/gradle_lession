@@ -145,7 +145,7 @@ class AppDelegateTransform extends Transform {
                         TransformUtil.scanAptGenerateClass(file)
                     }
                     if (file.exists() && file.isFile()) {
-                        TransformUtil.scanAppComponentClass(file)
+                        TransformUtil.scanAppComponentClass(file,dest)
                     }
 
                 }
@@ -177,8 +177,8 @@ class AppDelegateTransform extends Transform {
         if (MapUtils.isNotEmpty(TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS)) {
             Set<Map.Entry<File, List<String>>> entrySet = TransformUtil.SCAN_APPCOMPONENT_MARK_CLASS.entrySet()
             for (Map.Entry<File, List<String>> entry : entrySet) {
-                Logger.i("appcomponent file -> " + entry.key.absolutePath + "\n")
-                Logger.i("appcomponent classs -> " + entry.value + "\n")
+                Logger.i("appcomponent file -> " + entry.key.absolutePath)
+                Logger.i("appcomponent classs -> " + entry.value)
             }
             RegisterCodeGenerator.insertAppComponentInitCode()
         }

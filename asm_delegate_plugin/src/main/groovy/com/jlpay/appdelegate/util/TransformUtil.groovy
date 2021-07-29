@@ -95,12 +95,12 @@ class TransformUtil {
         ClassReader reader = new ClassReader(inputStream)
 //        ClassWriter classWriter = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS)
 //        reader.accept(new ScanAppComponentClassVisitor(Opcodes.ASM5), ClassReader.EXPAND_FRAMES)
-        reader.accept(new ScanAppComponentClassVisitor(Opcodes.ASM5,target), 0)
+        reader.accept(new ScanAppComponentClassVisitor(Opcodes.ASM5, target), 0)
         inputStream.close()
     }
 
-    static void scanAppComponentClass(File file) {
-        scanAppComponentClass(new FileInputStream(file), file)
+    static void scanAppComponentClass(File file, File target) {
+        scanAppComponentClass(new FileInputStream(file), target)
     }
 
 }
