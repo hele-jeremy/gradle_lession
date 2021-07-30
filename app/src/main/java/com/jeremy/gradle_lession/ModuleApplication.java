@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.util.Log;
 
 import com.jeremy.appdelegate.IAppLifecycleDelegate;
+import com.jlpay.base.BaseApplication;
 import com.jlpay.delegate.anontation.ModuleComponent;
 
 
@@ -17,7 +18,7 @@ public class ModuleApplication implements IAppLifecycleDelegate {
 
     @Override
     public void onCreate() {
-        Log.d("AppDelegate", "onCreate: ModuleApplication");
+        Log.d("AppDelegate", "onCreate: ModuleApplication  " + BaseApplication.getINSTANCE());
     }
 
     @Override

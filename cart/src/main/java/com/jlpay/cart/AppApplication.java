@@ -1,12 +1,15 @@
 package com.jlpay.cart;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.jlpay.base.BaseApplication;
 import com.jlpay.delegate.anontation.AppComponent;
 
 @AppComponent
 public class AppApplication extends BaseApplication {
 
-    /*@Override
+    @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
     }
@@ -14,10 +17,11 @@ public class AppApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("AppDelegate", "onCreate: AppApplication  " + BaseApplication.getINSTANCE());
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-    }*/
+    }
 }

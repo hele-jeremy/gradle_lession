@@ -24,12 +24,20 @@ public final class DelegateMeta implements Comparable<DelegateMeta> {
         return appDelegate;
     }
 
+
+    //https://blog.csdn.net/weixin_48470176/article/details/107476714
+    //https://blog.csdn.net/qq_35410620/article/details/100559319
+    //TreeSet比较数据丢失的问题
     @Override
     public int compareTo(DelegateMeta delegateMeta) {
         try {
             int ret = this.priority - delegateMeta.getPriority();
-            return  ret == 0 ? 1 : ret;
-//            return this.priority - delegateMeta.getPriority();
+            if (ret > 0 || ret == 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+//            return this.priority - delegateMeta.getPriority(); //两个值比较如果priority的值相同的情况下返回0可能会有数据丢失的问题
         } catch (Exception e) {
             e.printStackTrace();
             return 0;

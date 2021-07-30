@@ -6,9 +6,10 @@ import android.content.res.Configuration;
 import android.util.Log;
 
 import com.jeremy.appdelegate.IAppLifecycleDelegate;
+import com.jlpay.base.BaseApplication;
 import com.jlpay.delegate.anontation.ModuleComponent;
 
-@ModuleComponent(priority = 2)
+@ModuleComponent(priority = 3)
 public final class CartTestApplication implements IAppLifecycleDelegate {
     @Override
     public void attachBaseContext(Context base) {
@@ -17,7 +18,7 @@ public final class CartTestApplication implements IAppLifecycleDelegate {
 
     @Override
     public void onCreate() {
-        Log.d("AppDelegate", "onCreate: CartTestApplication");
+        Log.d("AppDelegate", "onCreate: CartTestApplication  " + BaseApplication.getINSTANCE());
     }
 
     @Override

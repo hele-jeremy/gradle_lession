@@ -1,5 +1,9 @@
 package com.jeremy.gradle_lession;
 
+import android.content.Context;
+import android.content.res.Configuration;
+import android.util.Log;
+
 import com.jlpay.base.BaseApplication;
 import com.jlpay.delegate.anontation.AppComponent;
 
@@ -7,7 +11,7 @@ import com.jlpay.delegate.anontation.AppComponent;
 public class MainApplication extends BaseApplication {
 
 
-   /* //        AppLifecycleDelegate.get().attachBaseContext(base);
+    //AppLifecycleDelegate.get().attachBaseContext(base);
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -15,17 +19,17 @@ public class MainApplication extends BaseApplication {
     }
 
 
-    //        AppLifecycleDelegate.get().onCreate();
+    //AppLifecycleDelegate.get().onCreate();
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("AppDelegate", "onCreate: MainApplication");
+        Log.d("AppDelegate", "onCreate: MainApplication  " + BaseApplication.getINSTANCE());
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }*/
+    }
 
 
 }

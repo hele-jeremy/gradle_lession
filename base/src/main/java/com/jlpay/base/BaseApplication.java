@@ -4,12 +4,16 @@ import android.app.Application;
 
 public class BaseApplication extends Application {
 
-    public static Application INSTANCE;
+    private static Application INSTANCE;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
         INSTANCE = (Application)getApplicationContext();
+    }
+
+    public static Application getINSTANCE() {
+        return INSTANCE;
     }
 }
