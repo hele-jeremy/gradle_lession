@@ -51,6 +51,8 @@ uploadArchives {
 
         mavenDeployer {
             repository(url: uri("../delegate_repo"))
+            //  /Users/hoko/Desktop/study/jetpack_lession/repo
+            repository(url: uri("/Users/hoko/Desktop/study/jetpack_lession/repo"))
         }
 
     }
