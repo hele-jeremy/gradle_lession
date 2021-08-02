@@ -34,6 +34,8 @@ https://blog.csdn.net/aesop_wubo/article/details/48948211（Opcodes.ALOAD,Opcode
 https://zhuanlan.zhihu.com/p/94498015?hmsr=toutiao.io（ASM子节码的介绍）
 https://joeskye1701.github.io/ASM/
 https://www.cnblogs.com/yungyu16/p/13172207.html
+https://jishuin.proginn.com/p/763bfbd36680
+https://juejin.cn/post/6927206349260636173#heading-5
 
 
 
