@@ -32,7 +32,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 
-    api 'io.github.hele-jeremy:appdelegate-annotation:1.0.0'
-    api 'io.github.hele-jeremy:appdelegate-api:1.0.0'
+    api 'io.github.hele-jeremy:appdelegate-annotation:1.0.1'
+    api 'io.github.hele-jeremy:appdelegate-api:1.0.1'
 
 }

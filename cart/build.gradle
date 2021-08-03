@@ -52,6 +52,6 @@ dependencies {
 //    implementation project(path: ':appdelegate_annotation')
 //    annotationProcessor project(':appdelegate_apt')
 
-    annotationProcessor 'io.github.hele-jeremy:appdelegate-apt:1.0.0'
+    annotationProcessor 'io.github.hele-jeremy:appdelegate-apt:1.0.1'
 
 }
