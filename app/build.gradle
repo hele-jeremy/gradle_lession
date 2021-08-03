@@ -52,8 +52,5 @@ dependencies {
     implementation project(path: ':base')
     implementation project(path: ':cart')
 
-
-    implementation project(path: ':applifecycle_delegate')
-    implementation project(path: ':appdelegate_annotation')
-    annotationProcessor project(':appdelegate_apt')
+    annotationProcessor 'io.github.hele-jeremy:appdelegate-apt:1.0.0'
 }

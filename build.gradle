@@ -6,20 +6,33 @@ buildscript {
 //        jcenter()
 
         //自定义插件的本地maven地址
-        maven { url "./asm_lifecycle_repo" }
-        maven { url "./delegate_repo" }
+//        maven { url "./asm_lifecycle_repo" }
+//        maven { url "./delegate_repo" }
+
+
+        maven { url "https://s01.oss.sonatype.org/content/repositories/releases/" }
+
+        maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
 //        classpath "jeremy.lifecycle.plugin:asm_lifecycle_plugin:1.0.0"
-        classpath "jlpay.appdelegate.plugin:asm_delegate_plugin:2.0.0"
+
+//        classpath "jlpay.appdelegate.plugin:asm_delegate_plugin:2.0.0"
+        classpath "io.github.hele-jeremy:appdelegate-regisger:1.0.0"
     }
 }
 
 allprojects {
     repositories {
-        google()
         mavenCentral()
+        mavenLocal()
+
+        maven { url "https://s01.oss.sonatype.org/content/repositories/releases/" }
+
+        maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+
+        google()
 //        jcenter()
     }
 }
