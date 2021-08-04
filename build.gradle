@@ -19,7 +19,7 @@ buildscript {
 //        classpath "jeremy.lifecycle.plugin:asm_lifecycle_plugin:1.0.0"
 
 //        classpath "jlpay.appdelegate.plugin:asm_delegate_plugin:2.0.0"
-        classpath "io.github.hele-jeremy:appdelegate-regisger:1.0.5-SNAPSHOT"
+        classpath "io.github.hele-jeremy:appdelegate-regisger:1.0.2"
     }
 }
 

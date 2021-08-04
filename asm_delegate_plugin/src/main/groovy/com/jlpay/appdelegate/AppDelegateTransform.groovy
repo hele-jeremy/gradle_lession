@@ -78,6 +78,7 @@ class AppDelegateTransform extends Transform {
 //        super.transform(transformInvocation)
 
         Logger.i("start scacn appdegate info ------- ")
+        TransformUtil.reset()
         def startTransformTime = System.currentTimeMillis()
         boolean isLeftSlash = File.separator == "/"
         //拿到所有的class文件包含当前工程和直接以源码依赖的工程的class(目录文件夹的形式出现） 依赖的第三方库(jar包形式出现)

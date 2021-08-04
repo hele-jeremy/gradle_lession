@@ -15,6 +15,13 @@ class TransformUtil {
     public static ArrayList<String> SCAN_APT_GENERATE_CLASS_LIST = new ArrayList<>()
     public static Map<File, List<String>> SCAN_APPCOMPONENT_MARK_CLASS = new HashMap<>()
 
+
+    static void reset(){
+        INSERT_BYTE_CODE_CLASS_FILE = null
+        SCAN_APT_GENERATE_CLASS_LIST.clear()
+        SCAN_APPCOMPONENT_MARK_CLASS.clear()
+    }
+
     /**
      * 过滤掉不需要扫描的jar包
      * @param path
