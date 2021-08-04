@@ -144,7 +144,7 @@ class AppDelegateTransform extends Transform {
                     if (file.exists() && file.isFile() && TransformUtil.shouldProcessClass(path)) {
                         TransformUtil.scanAptGenerateClass(file)
                     }
-                    if (file.exists() && file.isFile()) {
+                    if (file.exists() && file.isFile() && TransformUtil.shouldScanAppcomponnetClass(path)) {
                         TransformUtil.scanAppComponentClass(file, dest)
                     }
 

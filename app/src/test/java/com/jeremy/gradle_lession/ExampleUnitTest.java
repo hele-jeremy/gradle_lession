@@ -2,7 +2,7 @@ package com.jeremy.gradle_lession;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -14,4 +14,20 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void testWhile() {
+        int i = 5;
+        while (i >= 0) {
+            if(i == 3){
+//                return;
+                continue;
+//                break;
+            }
+            System.out.println("i => " + i);
+            --i;
+        }
+    }
+
+
 }
